@@ -1,0 +1,916 @@
+getgenv().Vir3 = {
+    ["Aimbot"] = {
+        ["Keybind"] = Enum.KeyCode.C,
+        ["CamlockPrediction"] = 0.110,
+        ["Prediction"] = 0.1294,
+        ["Basic"] = false,
+        ["TargetPart"] = "HumanoidRootPart",
+        ["NearestPart"] = true,
+        ["MultipleTargetPart"] = {"Head","HumanoidRootPart"},
+        ["CameraSmoothing"] = 0.125,
+        ["CameraShake"] = 0,
+        ["JumpOffset"] = -0.0,
+    },
+    ["Checks"] = {
+        ["DisableOnTargetDeath"] = true,
+        ["DisableOnPlayerDeath"] = true,
+        ["CheckKoStatus"] = true,
+        ["AntiGroundShots"] = true,
+        ["Anti_Curve"] = false -- not working fixing soon
+       
+    },
+    ["EspSection"] = {
+        ["ChamsESP"] = true,
+        ["ChamsESPKeybind"] = Enum.KeyCode.T,
+        ["ChamsColor1"] = Color3.fromRGB(199, 110, 255),
+        ["ChamsColor2"] = Color3.fromRGB(0, 0, 0),
+    },
+    ["CrosshairSection"] = {
+getgenv().Vir3 = {
+    ["Aimbot"] = {
+        ["Keybind"] = Enum.KeyCode.C,
+        ["CamlockPrediction"] = 0.110,
+        ["Prediction"] = 0.1294,
+        ["Basic"] = false,
+        ["TargetPart"] = "HumanoidRootPart",
+        ["NearestPart"] = true,
+        ["MultipleTargetPart"] = {"Head","HumanoidRootPart"},
+        ["CameraSmoothing"] = 0.125,
+        ["CameraShake"] = 0,
+        ["JumpOffset"] = -0.0,
+    },
+    ["Checks"] = {
+        ["DisableOnTargetDeath"] = true,
+        ["DisableOnPlayerDeath"] = true,
+        ["CheckKoStatus"] = true,
+        ["AntiGroundShots"] = true,
+        ["Anti_Curve"] = false -- not working fixing soon
+       
+    },
+    ["EspSection"] = {
+        ["ChamsESP"] = true,
+        ["ChamsESPKeybind"] = Enum.KeyCode.T,
+        ["ChamsColor1"] = Color3.fromRGB(199, 110, 255),
+        ["ChamsColor2"] = Color3.fromRGB(0, 0, 0),
+    },
+    ["CrosshairSection"] = {
+        ["enabled"] = true,
+        ["refreshrate"] = 0,
+        ["mode"] = 'mouse',
+        ["position"] = Vector2.new(0, 0),
+        ["width"] = 1.5,
+        ["length"] = 10,
+        ["radius"] = 11,
+        ["color"] = Color3.fromRGB(199, 110, 255),
+        ["spin"] = true,
+        ["spin_speed"] = 150,
+        ["spin_max"] = 340,
+        ["spin_style"] = Enum.EasingStyle.Sine,
+        ["resize"] = true,
+        ["resize_speed"] = 150,
+        ["resize_min"] = 5,
+        ["resize_max"] = 22,
+    },
+    ["Spin"] = {
+        ["Enabled"] = true,
+        ["SpinSpeed"] = 4900,
+        ["Degrees"] = 360,
+        ["Keybind"] = Enum.KeyCode.V,
+    },
+    ["Textures"] = {
+        ["Enabled"] = false,
+        ["Type"] = "Brick",
+        ["Color"] = Color3.fromRGB(199, 110, 255),
+    },
+    ["CFrame"] = {
+        ["Enabled"] = true,
+        ["Toggle"] = "b",
+        ["Multiplier"] = 0.9,
+    },
+    ["RemoveSeats"] = true,
+    ["BoxESP"] = {
+        ["Enabled"] = false,
+        ["Box_Color"] = Color3.fromRGB(255, 0, 0),
+        ["Box_Thickness"] = 0.1,
+
+        ["Team_Check"] = {
+            ["TeamCheck"] = false,
+            ["Green"] = Color3.fromRGB(0, 255, 0),
+            ["Red"] = Color3.fromRGB(255, 0, 0),
+        },
+        ["TeamColor"] = false,
+
+        ["Settings"] = {
+            ["Box_Color"] = Color3.fromRGB(255, 0, 0),
+            ["Tracer_Color"] = Color3.fromRGB(255, 0, 0),
+            ["Tracer_Thickness"] = 1,
+            ["Box_Thickness"] = 1,
+            ["Tracer_Origin"] = "Bottom",
+            ["Tracer_FollowMouse"] = false,
+            ["Tracers"] = true
+        }
+    },
+}
+
+
+-- AntiCurve function
+local function AntiCurve()
+    local character = game.Players.LocalPlayer.Character
+    if getgenv().Vir3.Anti_Curve and character and character.PrimaryPart then
+        local characterCf = character.PrimaryPart.CFrame
+        local target = game.Players.LocalPlayer.Character.HumanoidRootPart
+        local targetPos = target.Position
+        local charPos = character.PrimaryPart.Position
+        character:SetPrimaryPartCFrame(CFrame.lookAt(charPos, Vector3.new(targetPos.X, charPos.Y, targetPos.Z)))
+        wait()
+        character:SetPrimaryPartCFrame(characterCf)
+    end
+end
+
+
+
+
+-- // Update Detection // -- if your using it Nice
+local ReplicatedStorage   = game:GetService("ReplicatedStorage")
+local MainEvent           = ReplicatedStorage:FindFirstChild("MainEvent")
+
+
+
+
+local player = game:GetService("Players").LocalPlayer
+local camera = game:GetService("Workspace").CurrentCamera
+local mouse = player:GetMouse()
+
+local function NewQuad(thickness, color)
+    local quad = Drawing.new("Quad")
+    quad.Visible = false
+    quad.PointA = Vector2.new(0, 0)
+    quad.PointB = Vector2.new(0, 0)
+    quad.PointC = Vector2.new(0, 0)
+    quad.PointD = Vector2.new(0, 0)
+    quad.Color = color
+    quad.Filled = false
+    quad.Thickness = thickness
+    quad.Transparency = 1
+    return quad
+end
+
+local function NewLine(thickness, color)
+    local line = Drawing.new("Line")
+    line.Visible = false
+    line.From = Vector2.new(0, 0)
+    line.To = Vector2.new(0, 0)
+    line.Color = color
+    line.Thickness = thickness
+    line.Transparency = 1
+    return line
+end
+
+local function Visibility(state, lib)
+    for _, x in pairs(lib) do
+        x.Visible = state
+    end
+end
+
+local function ToColor3(col)
+    return Color3.new(col.r, col.g, col.b)
+end
+
+local function ESP(plr, settings)
+    local library = {
+        blacktracer = NewLine(settings.Tracer_Thickness * 2, Color3.new(0, 0, 0)),
+        tracer = NewLine(settings.Tracer_Thickness, settings.Tracer_Color),
+        black = NewQuad(settings.Box_Thickness * 2, Color3.new(0, 0, 0)),
+        box = NewQuad(settings.Box_Thickness, settings.Box_Color),
+        healthbar = NewLine(3, Color3.new(0, 0, 0)),
+        greenhealth = NewLine(1.5, Color3.new(0, 0, 0))
+    }
+
+    local function Colorize(color)
+        for _, x in pairs(library) do
+            if x ~= library.healthbar and x ~= library.greenhealth and x ~= library.blacktracer and x ~= library.black then
+                x.Color = color
+            end
+        end
+    end
+
+    local function Updater()
+        local connection
+        connection = game:GetService("RunService").RenderStepped:Connect(function()
+            if plr.Character and plr.Character:FindFirstChild("Humanoid") and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character.Humanoid.Health > 0 and plr.Character:FindFirstChild("Head") then
+                local HumPos, OnScreen = camera:WorldToViewportPoint(plr.Character.HumanoidRootPart.Position)
+                if OnScreen then
+                    local head = camera:WorldToViewportPoint(plr.Character.Head.Position)
+                    local DistanceY = math.clamp((head - HumPos).magnitude, 2, math.huge)
+
+                    local function Size(item)
+                        item.PointA = HumPos + Vector2.new(DistanceY, -DistanceY * 2)
+                        item.PointB = HumPos + Vector2.new(-DistanceY, -DistanceY * 2)
+                        item.PointC = HumPos + Vector2.new(-DistanceY, DistanceY * 2)
+                        item.PointD = HumPos + Vector2.new(DistanceY, DistanceY * 2)
+                    end
+
+                    Size(library.box)
+                    Size(library.black)
+
+                    if settings.Tracers then
+                        if settings.Tracer_Origin == "Middle" then
+                            library.tracer.From = camera.ViewportSize * 0.5
+                            library.blacktracer.From = camera.ViewportSize * 0.5
+                        elseif settings.Tracer_Origin == "Bottom" then
+                            library.tracer.From = Vector2.new(camera.ViewportSize.X * 0.5, camera.ViewportSize.Y)
+                            library.blacktracer.From = Vector2.new(camera.ViewportSize.X * 0.5, camera.ViewportSize.Y)
+                        end
+
+                        if settings.Tracer_FollowMouse then
+                            library.tracer.From = Vector2.new(mouse.X, mouse.Y + 36)
+                            library.blacktracer.From = Vector2.new(mouse.X, mouse.Y + 36)
+                        end
+
+                        library.tracer.To = Vector2.new(HumPos.X, HumPos.Y + DistanceY * 2)
+                        library.blacktracer.To = Vector2.new(HumPos.X, HumPos.Y + DistanceY * 2)
+                    else
+                        library.tracer.From = Vector2.new(0, 0)
+                        library.blacktracer.From = Vector2.new(0, 0)
+                        library.tracer.To = Vector2.new(0, 0)
+                        library.blacktracer.To = Vector2.new(0, 2)
+                    end
+
+                    local d = (HumPos - (HumPos + Vector2.new(-DistanceY, DistanceY * 2))).magnitude
+                    local healthoffset = plr.Character.Humanoid.Health / plr.Character.Humanoid.MaxHealth * d
+
+                    library.greenhealth.From = Vector2.new(HumPos.X - DistanceY - 4, HumPos.Y + DistanceY * 2)
+                    library.greenhealth.To = Vector2.new(HumPos.X - DistanceY - 4, HumPos.Y + DistanceY * 2 - healthoffset)
+
+                    library.healthbar.From = Vector2.new(HumPos.X - DistanceY - 4, HumPos.Y + DistanceY * 2)
+                    library.healthbar.To = Vector2.new(HumPos.X - DistanceY - 4, HumPos.Y - DistanceY * 2)
+
+                    local green = Color3.new(0, 1, 0)
+                    local red = Color3.new(1, 0, 0)
+
+                    library.greenhealth.Color = red:lerp(green, plr.Character.Humanoid.Health / plr.Character.Humanoid.MaxHealth)
+
+                    if settings.Team_Check.TeamCheck then
+                        if plr.TeamColor == player.TeamColor then
+                            Colorize(settings.Team_Check.Green)
+                        else
+                            Colorize(settings.Team_Check.Red)
+                        end
+                    else
+                        library.tracer.Color = settings.Tracer_Color
+                        library.box.Color = settings.Box_Color
+                    end
+
+                    if settings.TeamColor then
+                        Colorize(plr.TeamColor.Color)
+                    end
+
+                    Visibility(true, library)
+                else
+                    Visibility(false, library)
+                end
+            else
+                Visibility(false, library)
+                if not game.Players:FindFirstChild(plr.Name) then
+                    connection:Disconnect()
+                end
+            end
+        end)
+    end
+
+    coroutine.wrap(Updater)()
+end
+
+local function SetupESP()
+    for _, v in ipairs(game:GetService("Players"):GetPlayers()) do
+        if v.Name ~= player.Name then
+            ESP(v, getgenv().Vir3.BoxESP.Settings)
+        end
+    end
+
+    game.Players.PlayerAdded:Connect(function(newplr)
+        if newplr.Name ~= player.Name then
+            ESP(newplr, getgenv().Vir3.BoxESP.Settings)
+        end
+    end)
+end
+
+SetupESP()
+
+
+
+
+-- CFrame script
+if getgenv().Vir3.CFrame.Enabled then
+    repeat
+        wait()
+    until game:IsLoaded()
+
+    local Players = game:GetService('Players')
+    local LocalPlayer = Players.LocalPlayer
+    repeat
+        wait()
+    until LocalPlayer.Character
+
+    local UserInputService = game:GetService('UserInputService')
+    local RunService = game:GetService('RunService')
+
+    local Multiplier = getgenv().Vir3.CFrame.Multiplier
+    local IsEnabled = true
+
+    UserInputService.InputBegan:Connect(function(input)
+        if input.KeyCode == Enum.KeyCode.LeftBracket then
+            Multiplier = Multiplier + 0.01
+            print(Multiplier)
+            wait(0.2)
+            while UserInputService:IsKeyDown(Enum.KeyCode.LeftBracket) do
+                wait()
+                Multiplier = Multiplier + 0.01
+                print(Multiplier)
+            end
+        end
+        if input.KeyCode == Enum.KeyCode.RightBracket then
+            Multiplier = Multiplier - 0.01
+            print(Multiplier)
+            wait(0.2)
+            while UserInputService:IsKeyDown(Enum.KeyCode.RightBracket) do
+                wait()
+                Multiplier = Multiplier - 0.01
+                print(Multiplier)
+            end
+        end
+        if input.KeyCode == Enum.KeyCode[getgenv().Vir3.CFrame.Toggle:upper()] then
+            IsEnabled = not IsEnabled
+            if IsEnabled then
+                repeat
+                    LocalPlayer.Character.HumanoidRootPart.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame + LocalPlayer.Character.Humanoid.MoveDirection * Multiplier
+                    RunService.Stepped:Wait()
+                until not IsEnabled
+            end
+        end
+    end)
+end
+
+
+-- // Services // --
+local G                   = game
+local Run_Service         = G:GetService("RunService")
+local Players             = G:GetService("Players")
+local UserInputService    = G:GetService("UserInputService")
+local Local_Player        = Players.LocalPlayer
+local Mouse               = Local_Player:GetMouse()
+local Current_Camera      = G:GetService("Workspace").CurrentCamera
+local Replicated_Storage  = G:GetService("ReplicatedStorage")
+local StarterGui          = G:GetService("StarterGui")
+local Workspace           = G:GetService("Workspace")
+
+-- // Variables // --
+local Target = nil
+local V2 = Vector2.new
+local Fov = Drawing.new("Circle")
+local holdingMouseButton = false
+local lastToolUse = 0
+local HitPoint = Drawing.new("Circle")
+local FovParts = {}  -- Store the parts for square and triangle FOV
+
+
+
+
+
+
+-- Texture Application Logic
+if getgenv().Vir3.Textures.Enabled then
+    for _, v in pairs(game:GetService("Workspace"):GetDescendants()) do
+        if v:IsA("BasePart") and not v.Parent:FindFirstChild("Humanoid") then
+            v.Material = Enum.Material[getgenv().Vir3.Textures.Type]
+            v.Color = getgenv().Vir3.Textures.Color
+            if v:IsA("Texture") then
+                v:Destroy()
+            end
+        end
+    end
+end
+
+
+
+local Plr
+
+local highlight = Instance.new("Highlight")
+highlight.FillColor = Color3.fromRGB(199, 110, 255)
+highlight.Parent = game.CoreGui
+highlight.OutlineTransparency = 0
+highlight.OutlineColor = Color3.new(1, 1, 1)
+highlight.FillTransparency = 0.5
+
+local old; old = hookfunction(Drawing.new, function(class, properties)
+    local drawing = old(class)
+    for i, v in next, properties or {} do
+        drawing[i] = v
+    end
+    return drawing
+end)
+
+local runservice = game:GetService('RunService')
+local inputservice = game:GetService('UserInputService')
+local tweenservice = game:GetService('TweenService')
+local camera = workspace.CurrentCamera
+
+local last_render = 0
+
+local drawings = {
+    crosshair = {},
+    text = {Drawing.new('Text', {Size = 13, Font = 2, Outline = true, Text = 'tapbot', Color = Color3.new(1, 1, 1)}),
+            Drawing.new('Text', {Size = 13, Font = 2, Outline = true, Text = ".cc"}),},
+}
+
+for idx = 1, 8 do
+    drawings.crosshair[idx] = Drawing.new('Line')
+end
+
+function solve(angle, radius)
+    return Vector2.new(
+        math.sin(math.rad(angle)) * radius,
+        math.cos(math.rad(angle)) * radius
+    )
+end
+
+runservice.PostSimulation:Connect(function()
+
+    local _tick = tick()
+    local crosshair = getgenv().Vir3.CrosshairSection
+
+    if _tick - last_render > crosshair.refreshrate then
+        last_render = _tick
+
+        local position = (
+            crosshair.mode == 'center' and camera.ViewportSize / 2 or
+            crosshair.mode == 'mouse' and inputservice:GetMouseLocation() or
+            crosshair.position
+        )
+
+        local text_x = drawings.text[1].TextBounds.X + drawings.text[2].TextBounds.X
+
+        drawings.text[1].Visible = crosshair.enabled
+        drawings.text[2].Visible = crosshair.enabled
+
+        if crosshair.enabled then
+            drawings.text[1].Position = position + Vector2.new(-text_x / 2, crosshair.radius + (crosshair.resize and crosshair.resize_max or crosshair.length) + 15)
+            drawings.text[2].Position = drawings.text[1].Position + Vector2.new(drawings.text[1].TextBounds.X)
+            drawings.text[2].Color = crosshair.color
+            
+            for idx = 1, 4 do
+                local outline = drawings.crosshair[idx]
+                local inline = drawings.crosshair[idx + 4]
+    
+                local angle = (idx - 1) * 90
+                local length = crosshair.length
+    
+                if crosshair.spin then
+                    local spin_angle = -_tick * crosshair.spin_speed % crosshair.spin_max
+                    angle = angle + tweenservice:GetValue(spin_angle / 360, crosshair.spin_style, Enum.EasingDirection.InOut) * 360
+                end
+    
+                if crosshair.resize then
+                    local resize_length = tick() * crosshair.resize_speed % 180
+                    length = crosshair.resize_min + math.sin(math.rad(resize_length)) * crosshair.resize_max
+                end
+    
+                inline.Visible = true
+                inline.Color = crosshair.color
+                inline.From = position + solve(angle, crosshair.radius)
+                inline.To = position + solve(angle, crosshair.radius + length)
+                inline.Thickness = crosshair.width
+    
+                outline.Visible = true
+                outline.From = position + solve(angle, crosshair.radius - 1)
+                outline.To = position + solve(angle, crosshair.radius + length + 1)
+                outline.Thickness = crosshair.width + 1.5    
+            end
+        else
+            for idx = 1, 8 do
+                drawings.crosshair[idx].Visible = false
+            end
+        end
+
+    end
+end)
+
+
+-- 360 on bind
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local Camera = workspace.CurrentCamera
+local Toggle = false -- Initialize Toggle to false
+
+local function OnKeyPress(Input, GameProcessedEvent)
+    if Input.KeyCode == getgenv().Vir3.Aimbot.Keybind and not GameProcessedEvent then 
+        Toggle = not Toggle
+    elseif Input.KeyCode == getgenv().Vir3.Macro.SpeedGlitchKey then
+        if getgenv().Vir3.Macro.Enabled then 
+            getgenv().Vir3.Macro.SpeedGlitch = not getgenv().Vir3.Macro.SpeedGlitch
+            if getgenv().Vir3.Macro.SpeedGlitch then
+                repeat
+                    game:GetService("RunService").Heartbeat:Wait()
+                    keypress(0x49)
+                    game:GetService("RunService").Heartbeat:Wait()
+                    keypress(0x4F)
+                    game:GetService("RunService").Heartbeat:Wait()
+                    keyrelease(0x49)
+                    game:GetService("RunService").Heartbeat:Wait()
+                    keyrelease(0x4F)
+                    game:GetService("RunService").Heartbeat:Wait()
+                until not getgenv().Vir3.Macro.SpeedGlitch
+            end
+        end
+    end
+end
+
+UserInputService.InputBegan:Connect(OnKeyPress)
+
+
+
+--Trash Talk
+local words = {
+        'come tapn with Vir3',
+        'come tap with a real script',
+        'why miss when u can buy Vir3',
+        'start hitting ur shots wit Vir3',
+        'quit missing ur shots and tapn with Vir3',
+        'how did u miss that many shots',
+        "you suck im better"
+}
+
+local player = game.Players.LocalPlayer
+local keybind = 'y' -- keybind here 
+
+local event = game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest
+
+player:GetMouse().KeyDown:connect(function(key)
+    if key == keybind then
+        event:FireServer(words[math.random(#words)], "All")
+     end
+end)
+
+if (not getgenv().Loaded) then
+local userInputService = game:GetService("UserInputService")
+
+local function CheckAnti(Plr) -- // Anti-aim detection
+    if Plr.Character.HumanoidRootPart.Velocity.Y < -70 then
+        return true
+    elseif Plr and (Plr.Character.HumanoidRootPart.Velocity.X > 450 or Plr.Character.HumanoidRootPart.Velocity.X < -35) then
+        return true
+    elseif Plr and Plr.Character.HumanoidRootPart.Velocity.Y > 60 then
+        return true
+    elseif Plr and (Plr.Character.HumanoidRootPart.Velocity.Z > 35 or Plr.Character.HumanoidRootPart.Velocity.Z < -35) then
+        return true
+    else
+        return false
+    end
+end
+
+local function getnamecall()
+    if game.PlaceId == 2788229376 then
+        return "UpdateMousePos"
+    elseif game.PlaceId == 9825515356 then
+        return "MousePosUpdate"
+    elseif game.PlaceId == 5602055394 then
+        return "MousePos"
+    elseif game.PlaceId == 17403265390 or game.PlaceId == 17403166075 or game.PlaceId == 17403262882 or game.PlaceId == 15186202290 or game.PlaceId == 15763494605 then
+        return "MOUSE"
+    elseif game.PlaceId == 11143225577 then
+        return "UpdateMousePos"
+    elseif game.PlaceId == 15166543806 then
+        return "MoonUpdateMousePos"
+    elseif game.PlaceId == 17897702920 then
+        return "UpdateMousePos"
+    elseif game.PlaceId == 16033173781 then
+        return "UpdateMousePos"
+    elseif game.PlaceId == 7213786345 then
+        return "UpdateMousePos"
+    elseif game.PlaceId == 18110728826 then
+        return "UpdateMousePos"
+    elseif game.PlaceId == 17723797487 then
+        return "UpdateMousePos"
+    end
+end
+
+
+local function getPlaceData()
+    local placeId = tostring(game.PlaceId)
+    return placeData[placeId]
+end
+
+
+
+
+
+local Locking = false
+local Players = game:GetService("Players")
+local Client = Players.LocalPlayer
+local Plr = nil -- Initialize Plr here
+
+
+UserInputService.InputBegan:Connect(function(keygo, ok)
+    if (not ok) then
+        if (keygo.KeyCode == getgenv().Vir3.Aimbot.Keybind) then
+            Locking = not Locking
+            if Locking then
+                Plr = getClosestPlayerToCursor()
+            elseif not Locking then
+                if Plr then
+                    Plr = nil
+                end
+            end
+        end
+    end
+end)
+
+function getClosestPlayerToCursor()
+    local closestDist = math.huge
+    local closestPlr = nil
+    for _, v in ipairs(Players:GetPlayers()) do
+        if v ~= Client and v.Character and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health > 0 then
+            local screenPos, cameraVisible = workspace.CurrentCamera:WorldToViewportPoint(v.Character.HumanoidRootPart.Position)
+            if cameraVisible then
+                local distToMouse = (Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y) - Vector2.new(screenPos.X, screenPos.Y)).Magnitude
+                if distToMouse < closestDist then
+                    closestPlr = v
+                    closestDist = distToMouse
+                end
+            end
+        end
+    end
+    return closestPlr
+end
+
+function getClosestPartToCursor(Player)
+    local closestPart, closestDist = nil, math.huge
+    if Player.Character and Player.Character:FindFirstChild("Humanoid") and Player.Character:FindFirstChild("Head") and Player.Character.Humanoid.Health ~= 0 and Player.Character:FindFirstChild("HumanoidRootPart") then
+        for i, part in pairs(Player.Character:GetChildren()) do
+            if part:IsA("BasePart") then
+                local screenPos, cameraVisible = workspace.CurrentCamera:WorldToViewportPoint(part.Position)
+                local distToMouse = (Vector2.new(UserInputService:GetMouseLocation().X, UserInputService:GetMouseLocation().Y) - Vector2.new(screenPos.X, screenPos.Y)).Magnitude
+                if distToMouse < closestDist and table.find(getgenv().Vir3.Aimbot.MultipleTargetPart, part.Name) then
+                    closestPart = part
+                    closestDist = distToMouse
+                end
+            end
+        end
+        return closestPart
+    end
+end
+
+game:GetService("RunService").RenderStepped:Connect(function()
+    if Plr and Plr.Character then
+        if getgenv().Vir3.Aimbot.NearestPart == true and getgenv().Vir3.Aimbot.Basic == false then
+            getgenv().Vir3.Aimbot.TargetPart = tostring(getClosestPartToCursor(Plr))
+        elseif getgenv().Vir3.Aimbot.Basic == true and getgenv().Vir3.Aimbot.NearestPart == false then
+            getgenv().Vir3.Aimbot.TargetPart = getgenv().Vir3.Aimbot.TargetPart
+        end
+    end
+end)
+
+local function getVelocity(Player)
+    local Old = Player.Character.HumanoidRootPart.Position
+    wait(0.145)
+    local Current = Player.Character.HumanoidRootPart.Position
+    return (Current - Old) / 0.145
+end
+
+local function GetShakedVector3(Setting)
+    return Vector3.new(math.random(-Setting * 1e9, Setting * 1e9), math.random(-Setting * 1e9, Setting * 1e9), math.random(-Setting * 1e9, Setting * 1e9)) / 1e9;
+end
+
+local v = nil
+game:GetService("RunService").Heartbeat:Connect(function(deltaTime)
+    if Plr ~= nil and Plr.Character and Plr.Character:FindFirstChild("HumanoidRootPart") then
+        v = getVelocity(Plr)
+    end
+end)
+
+local mainevent = game:GetService("ReplicatedStorage").MainEvent
+
+Client.Character.ChildAdded:Connect(function(child)
+    if child:IsA("Tool") and child:FindFirstChild("MaxAmmo") then
+        child.Activated:Connect(function()
+            if Plr and Plr.Character then
+                local Position = Plr.Character.Humanoid:GetState() == Enum.HumanoidStateType.Freefall and Plr.Character[getgenv().Vir3.Aimbot.TargetPart].Position + Vector3.new(0, getgenv().Vir3.Aimbot.JumpOffset, 0) or Plr.Character[getgenv().Vir3.Aimbot.TargetPart].Position
+                if not CheckAnti(Plr) then
+                    mainevent:FireServer("UpdateMousePos", Position + ((Plr.Character.HumanoidRootPart.Velocity) * getgenv().Vir3.Aimbot.Prediction))
+                else
+                    mainevent:FireServer("UpdateMousePos", Position + ((Plr.Character.Humanoid.MoveDirection * Plr.Character.Humanoid.WalkSpeed) * getgenv().Vir3.Aimbot.Prediction))
+                end
+            end
+        end)
+    end
+end)
+
+Client.CharacterAdded:Connect(function(character)
+    character.ChildAdded:Connect(function(child)
+        if child:IsA("Tool") and child:FindFirstChild("MaxAmmo") then
+            child.Activated:Connect(function()
+                if Plr and Plr.Character then
+                    local Position = Plr.Character.Humanoid:GetState() == Enum.HumanoidStateType.Freefall and Plr.Character[getgenv().Vir3.Aimbot.TargetPart].Position + Vector3.new(0, getgenv().Vir3.Aimbot.JumpOffset, 0) or Plr.Character[getgenv().Vir3.Aimbot.TargetPart].Position
+                    if not CheckAnti(Plr) then
+                        mainevent:FireServer("UpdateMousePos", Position + ((Plr.Character.HumanoidRootPart.Velocity) * getgenv().Vir3.Aimbot.Prediction))
+                    else
+                        mainevent:FireServer("UpdateMousePos", Position + ((Plr.Character.Humanoid.MoveDirection * Plr.Character.Humanoid.WalkSpeed) * getgenv().Vir3.Aimbot.Prediction))
+                    end
+                end
+            end)
+        end
+    end)
+end)
+
+game:GetService("RunService").RenderStepped:Connect(function()
+    if Plr ~= nil and Plr.Character then
+        local Position = Plr.Character.Humanoid:GetState() == Enum.HumanoidStateType.Freefall and Plr.Character[getgenv().Vir3.Aimbot.TargetPart].Position + Vector3.new(0, getgenv().Vir3.Aimbot.JumpOffset, 0) or Plr.Character[getgenv().Vir3.Aimbot.TargetPart].Position
+        if not CheckAnti(Plr) then
+            local Main = CFrame.new(workspace.CurrentCamera.CFrame.p, Position + ((Plr.Character.HumanoidRootPart.Velocity) * getgenv().Vir3.Aimbot.CamlockPrediction) + GetShakedVector3(getgenv().Vir3.Aimbot.CameraShake))
+            workspace.CurrentCamera.CFrame = workspace.CurrentCamera.CFrame:Lerp(Main, getgenv().Vir3.Aimbot.CameraSmoothing, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
+        else
+            local Main = CFrame.new(workspace.CurrentCamera.CFrame.p, Position + ((Plr.Character.Humanoid.MoveDirection * Plr.Character.Humanoid.WalkSpeed) * getgenv().Vir3.Aimbot.CamlockPrediction) + GetShakedVector3(getgenv().Vir3.Aimbot.CameraShake))
+            workspace.CurrentCamera.CFrame = workspace.CurrentCamera.CFrame:Lerp(Main, getgenv().Vir3.Aimbot.CameraSmoothing, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
+        end
+    end
+    if getgenv().Vir3.Checks.CheckKoStatus == true and Plr and Plr.Character then
+        local KOd = Plr.Character:WaitForChild("BodyEffects")["K.O"].Value
+        local Grabbed = Plr.Character:FindFirstChild("GRABBING_CONSTRAINT") ~= nil
+        if Plr.Character.Humanoid.Health < 1 or KOd or Grabbed then
+            if Locking == true then
+                Plr = nil
+                Locking = false
+            end
+        end
+    end
+    if getgenv().Vir3.Checks.DisableOnTargetDeath == true and Plr and Plr.Character:FindFirstChild("Humanoid") then
+        if Plr.Character.Humanoid.health < 1 then
+            if Locking == true then
+                Plr = nil
+                Locking = false
+            end
+        end
+    end
+    if getgenv().Vir3.Checks.DisableOnPlayerDeath == true and Client.Character and Client.Character:FindFirstChild("Humanoid") and Client.Character.Humanoid.health < 1 then
+        if Locking == true then
+            Plr = nil
+            Locking = false
+        end
+    end
+    if getgenv().Vir3.Safety.AntiGroundShots == true and Plr.Character.Humanoid.Jump == true and Plr.Character.Humanoid.FloorMaterial == Enum.Material.Air then
+        pcall(function()
+            local TargetVelv5 = Plr.Character.HumanoidRootPart
+    TargetVelv5.Velocity = Vector3.new(TargetVelv5.Velocity.X, math.abs(TargetVelv5.Velocity.Y * 0.36),
+     TargetVelv5.Velocity.Z)
+            TargetVelv5.AssemblyLinearVelocity = Vector3.new(TargetVelv5.Velocity.X, math.abs(TargetVelv5.Velocity.Y * 0.36), TargetVelv5.Velocity.Z)
+        end)
+    end
+end)
+
+if getgenv().Vir3.EspSection.ChamsESP == true then
+
+local UserInputService = game:GetService("UserInputService")
+local ToggleKey = getgenv().Vir3.EspSection.ChamsESPKeybind
+
+local FillColor = getgenv().Vir3.EspSection.ChamsColor1
+local DepthMode = "AlwaysOnTop"
+local FillTransparency = 0.5
+local OutlineColor = getgenv().Vir3.EspSection.ChamsColor2
+local OutlineTransparency = 0
+
+local CoreGui = game:GetService("CoreGui")
+local Players = game:GetService("Players")
+local lp = Players.LocalPlayer
+local connections = {}
+
+local Storage = Instance.new("Folder")
+Storage.Parent = CoreGui
+Storage.Name = "Highlight_Storage"
+
+local isEnabled = false
+
+local function Highlight(plr)
+    local Highlight = Instance.new("Highlight")
+    Highlight.Name = plr.Name
+    Highlight.FillColor = FillColor
+    Highlight.DepthMode = DepthMode
+    Highlight.FillTransparency = FillTransparency
+    Highlight.OutlineColor = OutlineColor
+    Highlight.OutlineTransparency = 0
+    Highlight.Parent = Storage
+    
+    local plrchar = plr.Character
+    if plrchar then
+        Highlight.Adornee = plrchar
+    end
+
+    connections[plr] = plr.CharacterAdded:Connect(function(char)
+        Highlight.Adornee = char
+    end)
+end
+
+local function EnableHighlight()
+    isEnabled = true
+    for _, player in ipairs(Players:GetPlayers()) do
+        Highlight(player)
+    end
+end
+
+local function DisableHighlight()
+    isEnabled = false
+    for _, highlight in ipairs(Storage:GetChildren()) do
+        highlight:Destroy()
+    end
+    for _, connection in pairs(connections) do
+        connection:Disconnect()
+    end
+end
+
+UserInputService.InputBegan:Connect(function(input)
+    if input.KeyCode == ToggleKey then
+        if isEnabled then
+            DisableHighlight()
+        else
+            EnableHighlight()
+        end
+    end
+end)
+
+Players.PlayerAdded:Connect(function(player)
+    if isEnabled then
+        Highlight(player)
+    end
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+    local highlight = Storage:FindFirstChild(player.Name)
+    if highlight then
+        highlight:Destroy()
+    end
+    local connection = connections[player]
+    if connection then
+        connection:Disconnect()
+    end
+end)
+
+
+if isEnabled then
+    EnableHighlight()
+end
+end
+
+
+
+if getgenv().Vir3.Spin.Enabled == true then
+    
+    local Players = game:GetService("Players")
+    local UserInputService = game:GetService("UserInputService")
+    local RunService = game:GetService("RunService")
+    local Camera = workspace.CurrentCamera
+    local Toggle = getgenv().Vir3.Spin.Enabled
+    local RotationSpeed = getgenv().Vir3.Spin.SpinSpeed
+    local Keybind = getgenv().Vir3.Spin.Keybind
+    
+    local function OnKeyPress(Input, GameProcessedEvent)
+        if Input.KeyCode == Keybind and not GameProcessedEvent then 
+            Toggle = not Toggle
+        end
+    end
+    
+    UserInputService.InputBegan:Connect(OnKeyPress)
+    
+    local LastRenderTime = 0
+    local TotalRotation = 0
+    
+    local function RotateCamera()
+        if Toggle then
+            local CurrentTime = tick()
+            local TimeDelta = math.min(CurrentTime - LastRenderTime, 0.01)
+            LastRenderTime = CurrentTime
+    
+            local RotationAngle = RotationSpeed * TimeDelta
+            local Rotation = CFrame.fromAxisAngle(Vector3.new(0, 1, 0), math.rad(RotationAngle))
+            Camera.CFrame = Camera.CFrame * Rotation
+    
+            TotalRotation = TotalRotation + RotationAngle
+            if TotalRotation >= getgenv().Vir3.Spin.Degrees then 
+                Toggle = false
+                TotalRotation = 0
+            end
+        end
+    end
+    
+    RunService.RenderStepped:Connect(RotateCamera)
+end
+
+
+
+
+getgenv().Loaded = true -- end of the script
+else
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Vir3",
+        Text = "Updated Table",
+        Duration = 0.001
+    })
+end
